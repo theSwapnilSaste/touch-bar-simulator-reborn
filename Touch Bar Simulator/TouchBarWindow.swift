@@ -288,9 +288,18 @@ final class TouchBarWindow: NSPanel {
 		view.layer?.backgroundColor = NSColor.black.cgColor
 
 		let touchBarView = TouchBarView()
-		setContentSize(touchBarView.bounds.adding(padding: 5).size)
+		setContentSize(touchBarView.bounds.size)
+		minSize = touchBarView.bounds.size
 		touchBarView.frame = touchBarView.frame.centered(in: view.bounds)
 		view.addSubview(touchBarView)
+
+		touchBarView.translatesAutoresizingMaskIntoConstraints = false
+		NSLayoutConstraint.activate([
+			touchBarView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+			touchBarView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+			touchBarView.widthAnchor.constraint(equalToConstant: touchBarView.bounds.width),
+			touchBarView.heightAnchor.constraint(equalToConstant: touchBarView.bounds.height)
+		])
 
 		Defaults.tiedToLifetime(of: self) {
 			Defaults.observe(.windowTransparency) { [weak self] change in
@@ -342,6 +351,7 @@ final class TouchBarWindow: NSPanel {
 			styleMask: [
 				.titled,
 				.closable,
+				.resizable,
 				.nonactivatingPanel,
 				.hudWindow,
 				.utilityWindow
