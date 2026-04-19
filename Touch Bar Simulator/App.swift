@@ -48,8 +48,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 		"x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility".openUrl()
 
 		let alert = NSAlert()
-		alert.messageText = "Touch Bar Simulator needs accessibility access."
-		alert.informativeText = "In the System Preferences window that just opened, find “Touch Bar Simulator” in the list and check its checkbox. Then click the “Continue” button here."
+		alert.messageText = "Touch Bar Simulator Reborn needs accessibility access."
+		alert.informativeText = "In the System Preferences window that just opened, find “Touch Bar Simulator Reborn” in the list and check its checkbox. Then click the “Continue” button here."
 		alert.addButton(withTitle: "Continue")
 		alert.addButton(withTitle: "Quit")
 
@@ -115,6 +115,9 @@ extension AppDelegate: NSMenuDelegate {
 			menu.addItem(sliderMenuItem("Padding", boundTo: .windowPadding, min: 0.0, max: 120.0))
 		}
 
+		menu.addItem(NSMenuItem("Scale"))
+		menu.addItem(sliderMenuItem("Scale", boundTo: .windowScale, min: 0.5, max: 2.0))
+
 		menu.addItem(NSMenuItem("Opacity"))
 		menu.addItem(sliderMenuItem("Opacity", boundTo: .windowTransparency, min: 0.5, max: 1.0))
 
@@ -147,7 +150,7 @@ extension AppDelegate: NSMenuDelegate {
 
 		menu.addItem(NSMenuItem.separator())
 
-		menu.addItem(NSMenuItem("Quit Touch Bar Simulator", keyEquivalent: "q") { _ in
+		menu.addItem(NSMenuItem("Quit Touch Bar Simulator Reborn", keyEquivalent: "q") { _ in
 			NSApp.terminate(nil)
 		})
 	}

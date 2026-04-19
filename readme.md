@@ -1,4 +1,4 @@
-# Touch Bar Simulator [<img src="Stuff/AppIcon-readme.png" width="160" align="right">](https://github.com/sindresorhus/touch-bar-simulator/releases/latest)
+# Touch Bar Simulator Reborn [<img src="Stuff/AppIcon-readme.png" width="160" align="right">](https://github.com/sindresorhus/touch-bar-simulator/releases/latest)
 
 > Use the Touch Bar on any Mac
 

@@ -11,6 +11,8 @@ final class TouchBarView: NSView {
 		super.init(frame: .zero)
 
 		wantsLayer = true
+		layer?.contentsGravity = .resizeAspect
+		layer?.needsDisplayOnBoundsChange = true
 		start()
 		setFrameSize(DFRGetScreenSize())
 	}

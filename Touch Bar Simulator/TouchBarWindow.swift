@@ -3,6 +3,8 @@ import Combine
 import Defaults
 
 final class TouchBarWindow: NSPanel {
+	private var touchBarView: TouchBarView?
+	private var baseTouchBarSize = CGSize.zero
 	// TODO: Migrate this to not use `Codable`.
 	enum Docking: String, Codable {
 		case floating
@@ -244,7 +246,7 @@ final class TouchBarWindow: NSPanel {
 
 	func addTitlebar() {
 		styleMask.insert(.titled)
-		title = "Touch Bar Simulator"
+		title = "Touch Bar Simulator Reborn"
 
 		guard let toolbarView = toolbarView else {
 			return
@@ -288,17 +290,24 @@ final class TouchBarWindow: NSPanel {
 		view.layer?.backgroundColor = NSColor.black.cgColor
 
 		let touchBarView = TouchBarView()
-		setContentSize(touchBarView.bounds.size)
-		minSize = touchBarView.bounds.size
-		touchBarView.frame = touchBarView.frame.centered(in: view.bounds)
+		self.touchBarView = touchBarView
+		baseTouchBarSize = touchBarView.bounds.size
+
+		let scaledSize = CGSize(
+			width: baseTouchBarSize.width * Defaults[.windowScale],
+			height: baseTouchBarSize.height * Defaults[.windowScale]
+		)
+
+		setContentSize(scaledSize)
+		minSize = scaledSize
 		view.addSubview(touchBarView)
 
 		touchBarView.translatesAutoresizingMaskIntoConstraints = false
 		NSLayoutConstraint.activate([
-			touchBarView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-			touchBarView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-			touchBarView.widthAnchor.constraint(equalToConstant: touchBarView.bounds.width),
-			touchBarView.heightAnchor.constraint(equalToConstant: touchBarView.bounds.height)
+			touchBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+			touchBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+			touchBarView.topAnchor.constraint(equalTo: view.topAnchor),
+			touchBarView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
 		])
 
 		Defaults.tiedToLifetime(of: self) {
@@ -314,6 +323,9 @@ final class TouchBarWindow: NSPanel {
 				}
 
 				self.docking.reposition(window: self, padding: change.newValue)
+			}
+			Defaults.observe(.windowScale) { [weak self] _ in
+				self?.applyWindowScale()
 			}
 			// TODO: We could maybe simplify this by creating another `Default` extension to bind a default to a KeyPath:
 			// `defaults.bind(.showOnAllDesktops, to: \.showOnAllDesktops)`
@@ -343,6 +355,23 @@ final class TouchBarWindow: NSPanel {
 
 			self.docking.reposition(window: self, padding: Defaults[.windowPadding])
 		}
+	}
+
+	private func applyWindowScale() {
+		guard let touchBarView = touchBarView else {
+			return
+		}
+
+		let scaledSize = CGSize(
+			width: baseTouchBarSize.width * Defaults[.windowScale],
+			height: baseTouchBarSize.height * Defaults[.windowScale]
+		)
+
+		setContentSize(scaledSize)
+		minSize = scaledSize
+		touchBarView.needsLayout = true
+		contentView?.layoutSubtreeIfNeeded()
+		docking.reposition(window: self, padding: Defaults[.windowPadding])
 	}
 
 	convenience init() {

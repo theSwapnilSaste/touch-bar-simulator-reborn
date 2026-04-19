@@ -108,7 +108,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E3FE2CC11E726CE800C6713A /* Touch Bar Simulator */ = {
+		E3FE2CC11E726CE800C6713A /* Touch Bar Simulator Reborn */ = {
 			isa = PBXGroup;
 			children = (
 				E3930B0F216625BE00F66410 /* Constants.swift */,
@@ -122,15 +122,15 @@
 				E3FE2CC41E726CE800C6713A /* Assets.xcassets */,
 				E356A16421028DAB000148AD /* Other */,
 			);
-			path = "Touch Bar Simulator";
+			path = "Touch Bar Simulator Reborn";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E3FE2CBE1E726CE800C6713A /* Touch Bar Simulator */ = {
+		E3FE2CBE1E726CE800C6713A /* Touch Bar Simulator Reborn */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E3FE2CCC1E726CE800C6713A /* Build configuration list for PBXNativeTarget "Touch Bar Simulator" */;
+			buildConfigurationList = E3FE2CCC1E726CE800C6713A /* Build configuration list for PBXNativeTarget "Touch Bar Simulator Reborn" */;
 			buildPhases = (
 				E3679C9A215A1ECA0080270F /* SwiftLint */,
 				E3FE2CBB1E726CE800C6713A /* Sources */,
@@ -143,15 +143,15 @@
 			);
 			dependencies = (
 			);
-			name = "Touch Bar Simulator";
+			name = "Touch Bar Simulator Reborn";
 			packageProductDependencies = (
 				E31957F823F140D500856B40 /* Defaults */,
 				3C48E6A5247C370E00D22565 /* KeyboardShortcuts */,
 				E3445090251573A4004A5FC1 /* LaunchAtLogin */,
 				E3D07F1227947D6C006320B7 /* Sparkle */,
 			);
-			productName = "Touch Bar Simulator";
-			productReference = E3FE2CBF1E726CE800C6713A /* Touch Bar Simulator.app */;
+			productName = "Touch Bar Simulator Reborn";
+			productReference = E3FE2CBF1E726CE800C6713A /* Touch Bar Simulator Reborn.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -176,7 +176,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E3FE2CBA1E726CE800C6713A /* Build configuration list for PBXProject "Touch Bar Simulator" */;
+			buildConfigurationList = E3FE2CBA1E726CE800C6713A /* Build configuration list for PBXProject "Touch Bar Simulator Reborn" */;
 			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -476,7 +476,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E3FE2CBA1E726CE800C6713A /* Build configuration list for PBXProject "Touch Bar Simulator" */ = {
+		E3FE2CBA1E726CE800C6713A /* Build configuration list for PBXProject "Touch Bar Simulator Reborn" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E3FE2CCA1E726CE800C6713A /* Debug */,
