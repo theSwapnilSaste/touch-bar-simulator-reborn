@@ -17,17 +17,13 @@ jobs:
     - name: Build
       run: |
         xcodebuild -project "Touch Bar Simulator.xcodeproj" -scheme "Touch Bar Simulator" -configuration Release build
-
-    - name: Archive
-      run: |
-        xcodebuild -project "Touch Bar Simulator.xcodeproj" -scheme "Touch Bar Simulator" -configuration Release -archivePath "Touch Bar Simulator.xcarchive" archive
-
-    - name: Export
-      run: |
-        xcodebuild -exportArchive -archivePath "Touch Bar Simulator.xcarchive" -exportOptionsPlist export-options.plist -exportPath "export"
+      env:
+        CODE_SIGN_IDENTITY: ""
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGNING_ALLOWED: NO
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: Touch-Bar-Simulator
-        path: export/
+        path: ~/Library/Developer/Xcode/DerivedData/*/Build/Products/Release/Touch\ Bar\ Simulator.app
