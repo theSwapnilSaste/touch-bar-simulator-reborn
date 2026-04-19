@@ -16,11 +16,7 @@ jobs:
 
     - name: Build
       run: |
-        xcodebuild -project "Touch Bar Simulator.xcodeproj" -scheme "Touch Bar Simulator" -configuration Release build
-      env:
-        CODE_SIGN_IDENTITY: ""
-        CODE_SIGNING_REQUIRED: NO
-        CODE_SIGNING_ALLOWED: NO
+        xcodebuild -project "Touch Bar Simulator.xcodeproj" -scheme "Touch Bar Simulator" -configuration Release build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO PROVISIONING_PROFILE_SPECIFIER="" -allowProvisioningUpdates
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
