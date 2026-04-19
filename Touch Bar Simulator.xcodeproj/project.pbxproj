@@ -108,7 +108,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E3FE2CC11E726CE800C6713A /* Touch Bar Simulator Reborn */ = {
+		E3FE2CC11E726CE800C6713A /* Touch Bar Simulator */ = {
 			isa = PBXGroup;
 			children = (
 				E3930B0F216625BE00F66410 /* Constants.swift */,
@@ -122,7 +122,7 @@
 				E3FE2CC41E726CE800C6713A /* Assets.xcassets */,
 				E356A16421028DAB000148AD /* Other */,
 			);
-			path = "Touch Bar Simulator Reborn";
+			path = "Touch Bar Simulator";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
