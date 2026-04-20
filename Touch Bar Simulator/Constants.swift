@@ -4,6 +4,14 @@ import KeyboardShortcuts
 
 enum Constants {
 	static let windowAutosaveName = "TouchBarWindow"
+	
+	// Physical Touch Bar dimensions (in mm, used for pixel calculations)
+	static let touchBarPhysicalWidth: Double = 2170
+	static let touchBarPhysicalHeight: Double = 30
+	static let touchBarInset: Double = 2
+	static let touchIdDiameter: Double = 10
+	static let touchIdMargin: Double = 5
+	static let cornerRadius: Double = 3
 }
 
 extension Defaults.Keys {
