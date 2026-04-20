@@ -129,6 +129,9 @@ final class TouchBarWindow: NSPanel {
 			orderFront(nil)
 		}
 	}
+
+	@objc
+	func handleDockBehavior() {
 		guard
 			let visibleFrame = NSScreen.main?.visibleFrame,
 			let screenFrame = NSScreen.main?.frame

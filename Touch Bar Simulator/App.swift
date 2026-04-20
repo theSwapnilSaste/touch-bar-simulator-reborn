@@ -5,19 +5,23 @@ import LaunchAtLogin
 import KeyboardShortcuts
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
-	private(set) lazy var window = with(TouchBarWindow()) {
-		$0.alphaValue = Defaults[.windowTransparency]
-		$0.setUp()
-	}
+	private(set) lazy var window: TouchBarWindow = {
+		let window = TouchBarWindow()
+		window.alphaValue = Defaults[.windowTransparency]
+		window.setUp()
+		return window
+	}()
 
-	private(set) lazy var statusItem = with(NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)) {
-		$0.menu = with(NSMenu()) {
-			$0.delegate = self
-		}
-		$0.button!.image = .menuBarIcon
-		$0.button!.toolTip = "Right-click or option-click for menu"
-		$0.button!.preventsHighlight = true
-	}
+	private(set) lazy var statusItem: NSStatusItem = {
+		let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+		let menu = NSMenu()
+		menu.delegate = self
+		item.menu = menu
+		item.button!.image = .menuBarIcon
+		item.button!.toolTip = "Right-click or option-click for menu"
+		item.button!.preventsHighlight = true
+		return item
+	}()
 
 	private lazy var updateController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
 
@@ -180,7 +184,7 @@ extension AppDelegate: NSMenuDelegate {
 		toggleView()
 
 		if window.isVisible {
-			window.orderFront(nil)
+			window.orderFront(self)
 		}
 	}
 }
