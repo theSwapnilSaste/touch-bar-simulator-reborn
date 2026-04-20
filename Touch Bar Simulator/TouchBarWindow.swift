@@ -123,7 +123,12 @@ final class TouchBarWindow: NSPanel {
 	}
 
 	@objc
-	func handleDockBehavior() {
+	func activeSpaceDidChange() {
+		// When not showing on all desktops, ensure window moves to active space
+		if !showOnAllDesktops {
+			orderFront(nil)
+		}
+	}
 		guard
 			let visibleFrame = NSScreen.main?.visibleFrame,
 			let screenFrame = NSScreen.main?.frame
@@ -342,6 +347,14 @@ final class TouchBarWindow: NSPanel {
 
 		setFrameUsingName(Constants.windowAutosaveName)
 		setFrameAutosaveName(Constants.windowAutosaveName)
+
+		// Observe space changes to ensure window appears on active desktop when not showing on all desktops
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(activeSpaceDidChange),
+			name: NSWorkspace.activeSpaceDidChangeNotification,
+			object: nil
+		)
 
 		// Prevent the Touch Bar from momentarily becoming visible.
 		if !dockBehavior {

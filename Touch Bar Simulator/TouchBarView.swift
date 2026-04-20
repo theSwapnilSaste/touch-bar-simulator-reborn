@@ -8,11 +8,11 @@ final class TouchBarView: NSView {
 	private let frameView = NSView()
 	private let touchIdButton = NSButton()
 	
-	// Physical dimensions scaled to pixels (assuming 1mm = 1px for simplicity, adjust with scale)
-	private var scaledInset: Double { Constants.touchBarInset * Defaults[.windowScale] }
-	private var scaledTouchIdDiameter: Double { Constants.touchIdDiameter * Defaults[.windowScale] }
-	private var scaledTouchIdMargin: Double { Constants.touchIdMargin * Defaults[.windowScale] }
-	private var scaledCornerRadius: Double { Constants.cornerRadius * Defaults[.windowScale] }
+	// Physical dimensions scaled to pixels (using adjustable defaults)
+	private var scaledInset: Double { Defaults[.touchBarInset] * Defaults[.windowScale] }
+	private var scaledTouchIdDiameter: Double { Defaults[.touchIdDiameter] * Defaults[.windowScale] }
+	private var scaledTouchIdMargin: Double { Defaults[.touchIdMargin] * Defaults[.windowScale] }
+	private var scaledCornerRadius: Double { Defaults[.cornerRadius] * Defaults[.windowScale] }
 
 	override init(frame: CGRect) {
 		self.initialDFRStatus = DFRGetStatus()
@@ -48,6 +48,23 @@ final class TouchBarView: NSView {
 		start()
 		setFrameSize(DFRGetScreenSize())
 		updateLayout()
+		
+		// Observe changes to physical dimensions
+		Defaults.observe(.touchBarInset) { [weak self] _ in
+			self?.updateLayout()
+		}.tieToLifetime(of: self)
+		
+		Defaults.observe(.touchIdDiameter) { [weak self] _ in
+			self?.updateLayout()
+		}.tieToLifetime(of: self)
+		
+		Defaults.observe(.touchIdMargin) { [weak self] _ in
+			self?.updateLayout()
+		}.tieToLifetime(of: self)
+		
+		Defaults.observe(.cornerRadius) { [weak self] _ in
+			self?.updateLayout()
+		}.tieToLifetime(of: self)
 	}
 
 	@available(*, unavailable)

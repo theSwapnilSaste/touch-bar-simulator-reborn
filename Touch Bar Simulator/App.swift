@@ -111,6 +111,12 @@ extension AppDelegate: NSMenuDelegate {
 		menu.addItem(NSMenuItem("Hide duration"))
 		menu.addItem(sliderMenuItem("Hide duration", boundTo: .windowHideDuration, min: 1.0, max: 30.0, format: "%.1f"))
 
+		menu.addItem(NSMenuItem("Physical Dimensions"))
+		menu.addItem(sliderMenuItem("Frame Inset", boundTo: .touchBarInset, min: 0.0, max: 10.0, format: "%.1f"))
+		menu.addItem(sliderMenuItem("Touch ID Diameter", boundTo: .touchIdDiameter, min: 5.0, max: 20.0, format: "%.1f"))
+		menu.addItem(sliderMenuItem("Touch ID Margin", boundTo: .touchIdMargin, min: 0.0, max: 15.0, format: "%.1f"))
+		menu.addItem(sliderMenuItem("Corner Radius", boundTo: .cornerRadius, min: 0.0, max: 10.0, format: "%.1f"))
+
 		menu.addItem(NSMenuItem.separator())
 
 		menu.addItem(NSMenuItem("Capture Screenshot", keyEquivalent: "6", keyModifiers: [.shift, .command]) { [self] _ in

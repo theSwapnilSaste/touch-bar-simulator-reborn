@@ -24,6 +24,12 @@ extension Defaults.Keys {
 	static let lastFloatingPosition = Key<CGPoint?>("lastFloatingPosition")
 	static let dockBehavior = Key<Bool>("dockBehavior", default: false)
 	static let lastWindowDockingWithDockBehavior = Key<TouchBarWindow.Docking>("windowDockingWithDockBehavior", default: .dockedToBottom)
+	
+	// Adjustable physical dimensions
+	static let touchBarInset = Key<Double>("touchBarInset", default: 2.0)
+	static let touchIdDiameter = Key<Double>("touchIdDiameter", default: 10.0)
+	static let touchIdMargin = Key<Double>("touchIdMargin", default: 5.0)
+	static let cornerRadius = Key<Double>("cornerRadius", default: 3.0)
 }
 
 extension TouchBarWindow.Docking: Defaults.Serializable {}
