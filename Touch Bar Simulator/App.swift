@@ -90,36 +90,26 @@ extension AppDelegate: NSMenuDelegate {
 		}
 		menu.items.append(contentsOf: statusMenuDockingItems)
 
-		func sliderMenuItem(_ title: String, boundTo key: Defaults.Key<Double>, min: Double, max: Double) -> NSMenuItem {
+		func sliderMenuItem(_ title: String, boundTo key: Defaults.Key<Double>, min: Double, max: Double, format: String = "%.2f") -> NSMenuItem {
 			let menuItem = NSMenuItem(title)
-			let containerView = NSView(frame: CGRect(origin: .zero, size: CGSize(width: 200, height: 20)))
-
-			let slider = MenubarSlider().alwaysRedisplayOnValueChanged()
-			slider.frame = CGRect(x: 20, y: 4, width: 180, height: 11)
-			slider.minValue = min
-			slider.maxValue = max
-			slider.bindDoubleValue(to: key)
-
-			containerView.addSubview(slider)
-			slider.translatesAutoresizingMaskIntoConstraints = false
-			slider.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24).isActive = true
-			slider.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -9).isActive = true
-			slider.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-			menuItem.view = containerView
-
+			let sliderView = MenuSliderView(key: key, min: min, max: max, format: format)
+			menuItem.view = sliderView
 			return menuItem
 		}
 
 		if Defaults[.windowDocking] != .floating {
 			menu.addItem(NSMenuItem("Padding"))
-			menu.addItem(sliderMenuItem("Padding", boundTo: .windowPadding, min: 0.0, max: 120.0))
+			menu.addItem(sliderMenuItem("Padding", boundTo: .windowPadding, min: 0.0, max: 120.0, format: "%.1f"))
 		}
 
 		menu.addItem(NSMenuItem("Scale"))
-		menu.addItem(sliderMenuItem("Scale", boundTo: .windowScale, min: 0.5, max: 2.0))
+		menu.addItem(sliderMenuItem("Scale", boundTo: .windowScale, min: 0.5, max: 2.0, format: "%.2f"))
 
 		menu.addItem(NSMenuItem("Opacity"))
-		menu.addItem(sliderMenuItem("Opacity", boundTo: .windowTransparency, min: 0.5, max: 1.0))
+		menu.addItem(sliderMenuItem("Opacity", boundTo: .windowTransparency, min: 0.5, max: 1.0, format: "%.2f"))
+
+		menu.addItem(NSMenuItem("Hide duration"))
+		menu.addItem(sliderMenuItem("Hide duration", boundTo: .windowHideDuration, min: 1.0, max: 30.0, format: "%.1f"))
 
 		menu.addItem(NSMenuItem.separator())
 
@@ -186,5 +176,78 @@ extension AppDelegate: NSMenuDelegate {
 		if window.isVisible {
 			window.orderFront(nil)
 		}
+	}
+}
+
+private final class MenuSliderView: NSView {
+	private let slider: MenubarSlider
+	private let valueField: NSTextField
+	private let key: Defaults.Key<Double>
+	private let format: String
+
+	init(key: Defaults.Key<Double>, min: Double, max: Double, format: String = "%.2f") {
+		self.slider = MenubarSlider().alwaysRedisplayOnValueChanged()
+		self.valueField = NSTextField(frame: .zero)
+		self.key = key
+		self.format = format
+
+		super.init(frame: CGRect(x: 0, y: 0, width: 260, height: 24))
+
+		slider.minValue = min
+		slider.maxValue = max
+		slider.bindDoubleValue(to: key)
+		slider.addAction { [weak self] sender in
+			guard let self = self else { return }
+			self.valueField.stringValue = String(format: self.format, sender.doubleValue)
+		}
+
+		valueField.font = .systemFont(ofSize: 11)
+		valueField.alignment = .right
+		valueField.isBezeled = true
+		valueField.isEditable = true
+		valueField.isBordered = true
+		valueField.wantsLayer = true
+		valueField.layer?.cornerRadius = 4
+		valueField.target = self
+		valueField.action = #selector(Self.valueFieldChanged(_:))
+		valueField.stringValue = String(format: format, Defaults[key])
+
+		Defaults.observe(key) { [weak self] change in
+			guard let self = self else { return }
+			self.slider.doubleValue = change.newValue
+			self.valueField.stringValue = String(format: self.format, change.newValue)
+		}
+		.tieToLifetime(of: self)
+
+		addSubview(slider)
+		addSubview(valueField)
+
+		slider.translatesAutoresizingMaskIntoConstraints = false
+		valueField.translatesAutoresizingMaskIntoConstraints = false
+
+		NSLayoutConstraint.activate([
+			slider.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+			slider.centerYAnchor.constraint(equalTo: centerYAnchor),
+			slider.trailingAnchor.constraint(equalTo: valueField.leadingAnchor, constant: -8),
+			slider.heightAnchor.constraint(equalToConstant: 12),
+
+			valueField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+			valueField.centerYAnchor.constraint(equalTo: centerYAnchor),
+			valueField.widthAnchor.constraint(equalToConstant: 46),
+			valueField.heightAnchor.constraint(equalToConstant: 18)
+		])
+	}
+
+	@available(*, unavailable)
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+
+	@objc private func valueFieldChanged(_ sender: NSTextField) {
+		let parsed = Double(sender.stringValue) ?? slider.doubleValue
+		let normalized = min(max(parsed, slider.minValue), slider.maxValue)
+		Defaults[key] = normalized
+		slider.doubleValue = normalized
+		sender.stringValue = String(format: format, normalized)
 	}
 }
