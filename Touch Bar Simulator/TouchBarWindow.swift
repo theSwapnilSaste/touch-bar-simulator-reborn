@@ -369,9 +369,12 @@ final class TouchBarWindow: NSPanel {
 
 		setContentSize(scaledSize)
 		minSize = scaledSize
-		touchBarView.needsLayout = true		touchBarView.updateLayout()		contentView?.layoutSubtreeIfNeeded()
+		touchBarView.needsLayout = true
+		touchBarView.updateLayout()
+		contentView?.layoutSubtreeIfNeeded()
 		docking.reposition(window: self, padding: Defaults[.windowPadding])
 	}
+
 
 	convenience init() {
 		self.init(

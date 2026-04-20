@@ -133,7 +133,7 @@ final class TouchBarView: NSView {
 		}
 	}
 	
-	private func updateLayout() {
+	func updateLayout() {
 		let bounds = self.bounds
 		let inset = scaledInset
 		
