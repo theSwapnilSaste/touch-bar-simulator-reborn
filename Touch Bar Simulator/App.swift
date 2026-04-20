@@ -148,6 +148,10 @@ extension AppDelegate: NSMenuDelegate {
 			popover.show(relativeTo: button.frame, of: button, preferredEdge: .maxY)
 		})
 
+		menu.addItem(NSMenuItem("Relaunch Touch Bar Simulator Reborn") { _ in
+			SSApp.relaunch()
+		})
+
 		menu.addItem(NSMenuItem.separator())
 
 		menu.addItem(NSMenuItem("Quit Touch Bar Simulator Reborn", keyEquivalent: "q") { _ in
