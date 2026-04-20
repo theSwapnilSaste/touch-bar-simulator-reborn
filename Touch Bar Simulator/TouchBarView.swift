@@ -1,4 +1,5 @@
 import Cocoa
+import Defaults
 
 final class TouchBarView: NSView {
 	private var stream: CGDisplayStream?
