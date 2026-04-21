@@ -7,12 +7,46 @@ final class TouchBarView: NSView {
 	private let initialDFRStatus: Int32
 	private let frameView = NSView()
 	private let touchIdButton = NSButton()
+	private let macSpecs = MacSpecifications.current()
 	
-	// Physical dimensions scaled to pixels (using adjustable defaults)
-	private var scaledInset: Double { Defaults[.touchBarInset] * Defaults[.windowScale] }
-	private var scaledTouchIdDiameter: Double { Defaults[.touchIdDiameter] * Defaults[.windowScale] }
-	private var scaledTouchIdMargin: Double { Defaults[.touchIdMargin] * Defaults[.windowScale] }
-	private var scaledCornerRadius: Double { Defaults[.cornerRadius] * Defaults[.windowScale] }
+	// Physical dimensions scaled to pixels (using adjustable defaults or Mac specs)
+	private var scaledInset: Double {
+		if Defaults[.usePhysicalModelMatching] {
+			return Defaults[.touchBarInset] * Defaults[.windowScale]
+		}
+		return Defaults[.touchBarInset] * Defaults[.windowScale]
+	}
+	
+	private var scaledTouchIdDiameter: Double {
+		if Defaults[.usePhysicalModelMatching] {
+			// Convert mm to points
+			let dpi = MacModelDetector.screenDPI()
+			let pointsPerMM = Constants.standardDPI / 25.4
+			let scalingFactor = dpi / Constants.standardDPI
+			return (macSpecs.touchIdDiameter * pointsPerMM) * (1.0 / scalingFactor) * Defaults[.windowScale]
+		}
+		return Defaults[.touchIdDiameter] * Defaults[.windowScale]
+	}
+	
+	private var scaledTouchIdMargin: Double {
+		if Defaults[.usePhysicalModelMatching] {
+			let dpi = MacModelDetector.screenDPI()
+			let pointsPerMM = Constants.standardDPI / 25.4
+			let scalingFactor = dpi / Constants.standardDPI
+			return (macSpecs.touchIdMargin * pointsPerMM) * (1.0 / scalingFactor) * Defaults[.windowScale]
+		}
+		return Defaults[.touchIdMargin] * Defaults[.windowScale]
+	}
+	
+	private var scaledCornerRadius: Double {
+		if Defaults[.usePhysicalModelMatching] {
+			let dpi = MacModelDetector.screenDPI()
+			let pointsPerMM = Constants.standardDPI / 25.4
+			let scalingFactor = dpi / Constants.standardDPI
+			return (macSpecs.cornerRadius * pointsPerMM) * (1.0 / scalingFactor) * Defaults[.windowScale]
+		}
+		return Defaults[.cornerRadius] * Defaults[.windowScale]
+	}
 
 	override init(frame: CGRect) {
 		self.initialDFRStatus = DFRGetStatus()
@@ -36,14 +70,16 @@ final class TouchBarView: NSView {
 		displayView.layer?.contentsGravity = .resizeAspect
 		frameView.addSubview(displayView)
 		
-		// Touch ID button
-		touchIdButton.isBordered = false
-		touchIdButton.bezelStyle = .circular
-		touchIdButton.image = NSImage(systemSymbolName: "touchid", accessibilityDescription: "Touch ID")
-		touchIdButton.imageScaling = .scaleProportionallyUpOrDown
-		touchIdButton.target = self
-		touchIdButton.action = #selector(touchIdClicked)
-		frameView.addSubview(touchIdButton)
+		// Touch ID button (only on Macs with Touch ID)
+		if macSpecs.hasPhysicalTouchID {
+			touchIdButton.isBordered = false
+			touchIdButton.bezelStyle = .circular
+			touchIdButton.image = NSImage(systemSymbolName: "touchid", accessibilityDescription: "Touch ID")
+			touchIdButton.imageScaling = .scaleProportionallyUpOrDown
+			touchIdButton.target = self
+			touchIdButton.action = #selector(touchIdClicked)
+			frameView.addSubview(touchIdButton)
+		}
 		
 		start()
 		setFrameSize(DFRGetScreenSize())
@@ -109,8 +145,45 @@ final class TouchBarView: NSView {
 	}
 
 	private func mouseEvent(_ event: NSEvent) {
-		let location = convert(event.locationInWindow, from: nil)
-		DFRFoundationPostEventWithMouseActivity(event.type, location)
+		let locationInView = convert(event.locationInWindow, from: nil)
+		
+		// Check if the click is within the displayView (Touch Bar content area)
+		let displayViewRect = displayView.frame
+		
+		// Only process clicks within the display view
+		guard displayViewRect.contains(locationInView) else {
+			return
+		}
+		
+		// Convert to displayView coordinates
+		let locationInDisplayView = NSPoint(
+			x: locationInView.x - displayViewRect.origin.x,
+			y: locationInView.y - displayViewRect.origin.y
+		)
+		
+		// Get the actual Touch Bar dimensions (what the system expects)
+		let actualTouchBarSize = getActualTouchBarSize()
+		
+		// Scale the coordinates back to the original Touch Bar coordinate system
+		let scaledX = (locationInDisplayView.x / displayViewRect.width) * actualTouchBarSize.width
+		// Flip Y coordinate if needed (Touch Bar might have Y=0 at top, macOS views have Y=0 at bottom)
+		let scaledY = (1.0 - (locationInDisplayView.y / displayViewRect.height)) * actualTouchBarSize.height
+		
+		// Ensure coordinates are within valid bounds
+		let clampedX = max(0, min(scaledX, actualTouchBarSize.width))
+		let clampedY = max(0, min(scaledY, actualTouchBarSize.height))
+		
+		let touchBarLocation = NSPoint(x: clampedX, y: clampedY)
+		
+		// Send the correctly scaled coordinates to the system
+		DFRFoundationPostEventWithMouseActivity(event.type, touchBarLocation)
+	}
+
+	/// Get the actual Touch Bar native resolution that the system expects
+	private func getActualTouchBarSize() -> CGSize {
+		// DFRGetScreenSize() returns the Touch Bar's native pixel dimensions
+		// This is what the system expects for coordinate input
+		return DFRGetScreenSize()
 	}
 
 	override func mouseDown(with event: NSEvent) {
@@ -157,13 +230,19 @@ final class TouchBarView: NSView {
 		// Frame view fills the bounds
 		frameView.frame = bounds
 		
-		// Display view inset from frame
-		displayView.frame = NSRect(x: inset, y: inset, width: bounds.width - 2 * inset - scaledTouchIdDiameter - scaledTouchIdMargin, height: bounds.height - 2 * inset)
+		// Calculate display view width based on whether Touch ID button exists
+		let hasButton = touchIdButton.superview != nil
+		let displayViewWidth = hasButton ? (bounds.width - 2 * inset - scaledTouchIdDiameter - scaledTouchIdMargin) : (bounds.width - 2 * inset)
 		
-		// Touch ID button on the right
-		let buttonSize = NSSize(width: scaledTouchIdDiameter, height: scaledTouchIdDiameter)
-		let buttonOrigin = NSPoint(x: bounds.width - inset - scaledTouchIdDiameter, y: (bounds.height - scaledTouchIdDiameter) / 2)
-		touchIdButton.frame = NSRect(origin: buttonOrigin, size: buttonSize)
+		// Display view inset from frame
+		displayView.frame = NSRect(x: inset, y: inset, width: displayViewWidth, height: bounds.height - 2 * inset)
+		
+		// Touch ID button on the right (if it exists on this Mac model)
+		if hasButton {
+			let buttonSize = NSSize(width: scaledTouchIdDiameter, height: scaledTouchIdDiameter)
+			let buttonOrigin = NSPoint(x: bounds.width - inset - scaledTouchIdDiameter, y: (bounds.height - scaledTouchIdDiameter) / 2)
+			touchIdButton.frame = NSRect(origin: buttonOrigin, size: buttonSize)
+		}
 	}
 	
 	override func setFrameSize(_ newSize: NSSize) {

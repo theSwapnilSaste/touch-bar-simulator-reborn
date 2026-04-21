@@ -5,6 +5,8 @@ import Defaults
 final class TouchBarWindow: NSPanel {
 	private var touchBarView: TouchBarView?
 	private var baseTouchBarSize = CGSize.zero
+	private var macSpecs = MacSpecifications.current()
+	
 	// TODO: Migrate this to not use `Codable`.
 	enum Docking: String, Codable {
 		case floating
@@ -299,7 +301,15 @@ final class TouchBarWindow: NSPanel {
 
 		let touchBarView = TouchBarView()
 		self.touchBarView = touchBarView
-		baseTouchBarSize = touchBarView.bounds.size
+		
+		// Set base size based on physical model matching preference
+		if Defaults[.usePhysicalModelMatching] && Defaults[.maintainPhysicalSize] {
+			baseTouchBarSize = getPhysicalTouchBarSize()
+			// Store the detected model
+			Defaults[.detectedMacModel] = macSpecs.displayName
+		} else {
+			baseTouchBarSize = touchBarView.bounds.size
+		}
 
 		let scaledSize = CGSize(
 			width: baseTouchBarSize.width * Defaults[.windowScale],
@@ -414,5 +424,41 @@ final class TouchBarWindow: NSPanel {
 		self.worksWhenModal = true
 		self.acceptsMouseMovedEvents = true
 		self.isMovableByWindowBackground = false
+	}
+
+	// MARK: - Physical Dimension Helpers
+
+	/// Convert millimeters to screen points accounting for DPI
+	/// This ensures 1:1 physical size match regardless of display resolution
+	private func millimetersToPoints(_ mm: Double) -> Double {
+		// 1 inch = 25.4 mm
+		// 1 inch = 72 points (macOS standard)
+		let pointsPerMM = Constants.standardDPI / 25.4
+		let scalingFactor = MacModelDetector.screenDPI() / Constants.standardDPI
+		return (mm * pointsPerMM) * (1.0 / scalingFactor)
+	}
+
+	/// Get the physical size of the Touch Bar for the current Mac model
+	/// Returns size in screen points that displays at 1:1 physical size
+	private func getPhysicalTouchBarSize() -> CGSize {
+		if !Defaults[.usePhysicalModelMatching] {
+			// Use custom dimensions if physical matching is disabled
+			let width = millimetersToPoints(Constants.touchBarPhysicalWidth / 7.8) // ~278mm effective width
+			let height = millimetersToPoints(Defaults[.touchBarHeightMM] ?? Constants.touchBarPhysicalHeight)
+			return CGSize(width: width, height: height)
+		}
+
+		let specs = macSpecs
+		let width = millimetersToPoints(specs.touchBarWidthMM)
+		let height = millimetersToPoints(specs.touchBarHeightMM)
+		
+		return CGSize(width: width, height: height)
+	}
+
+	/// Get information about the current Mac model
+	func getCurrentMacInfo() -> (model: String, width: Double, height: Double, escapeKey: Bool, specs: MacSpecifications) {
+		let specs = macSpecs
+		let size = getPhysicalTouchBarSize()
+		return (specs.displayName, size.width, size.height, specs.hasPhysicalEscapeKey, specs)
 	}
 }

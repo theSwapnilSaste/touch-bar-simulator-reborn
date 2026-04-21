@@ -109,6 +109,25 @@ extension AppDelegate: NSMenuDelegate {
 		menu.addItem(NSMenuItem("Scale"))
 		menu.addItem(sliderMenuItem("Scale", boundTo: .windowScale, min: 0.5, max: 2.0, format: "%.2f"))
 
+		menu.addItem(NSMenuItem.separator())
+
+		// Mac Model Information
+		let macInfo = window.getCurrentMacInfo()
+		let modelInfoItem = NSMenuItem("Mac Model")
+		let modelLabel = NSTextField(labelWithString: "Detected: \(macInfo.model)")
+		modelLabel.font = .systemFont(ofSize: 11)
+		modelLabel.alignment = .left
+		modelInfoItem.view = modelLabel
+		menu.addItem(modelInfoItem)
+
+		let physicalMatchingItem = NSMenuItem("Match Physical Size").bindState(to: .usePhysicalModelMatching)
+		menu.addItem(physicalMatchingItem)
+
+		let maintainPhysicalItem = NSMenuItem("Maintain Size on Resolution Change").bindState(to: .maintainPhysicalSize)
+		menu.addItem(maintainPhysicalItem)
+
+		menu.addItem(NSMenuItem.separator())
+
 		menu.addItem(NSMenuItem("Opacity"))
 		menu.addItem(sliderMenuItem("Opacity", boundTo: .windowTransparency, min: 0.5, max: 1.0, format: "%.2f"))
 

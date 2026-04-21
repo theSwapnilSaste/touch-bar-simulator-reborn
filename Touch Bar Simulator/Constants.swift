@@ -6,12 +6,17 @@ enum Constants {
 	static let windowAutosaveName = "TouchBarWindow"
 	
 	// Physical Touch Bar dimensions (in mm, used for pixel calculations)
+	// These are defaults when physical model matching is disabled
 	static let touchBarPhysicalWidth: Double = 2170
 	static let touchBarPhysicalHeight: Double = 30
 	static let touchBarInset: Double = 2
 	static let touchIdDiameter: Double = 10
 	static let touchIdMargin: Double = 5
 	static let cornerRadius: Double = 3
+	
+	// DPI Constants
+	static let standardDPI: Double = 72.0 // macOS standard DPI
+	static let retinaScaleFactor: Double = 2.0 // Retina displays use 2x scaling
 }
 
 extension Defaults.Keys {
@@ -30,6 +35,12 @@ extension Defaults.Keys {
 	static let touchIdDiameter = Key<Double>("touchIdDiameter", default: 10.0)
 	static let touchIdMargin = Key<Double>("touchIdMargin", default: 5.0)
 	static let cornerRadius = Key<Double>("cornerRadius", default: 3.0)
+	static let touchBarHeightMM = Key<Double>("touchBarHeightMM", default: 30.0)
+	
+	// Physical model matching
+	static let usePhysicalModelMatching = Key<Bool>("usePhysicalModelMatching", default: true)
+	static let detectedMacModel = Key<String>("detectedMacModel", default: "")
+	static let maintainPhysicalSize = Key<Bool>("maintainPhysicalSize", default: true)
 }
 
 extension TouchBarWindow.Docking: Defaults.Serializable {}
