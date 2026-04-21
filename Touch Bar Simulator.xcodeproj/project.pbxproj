@@ -25,6 +25,7 @@
 		E3D07F1327947D6C006320B7 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = E3D07F1227947D6C006320B7 /* Sparkle */; };
 		E3FE2CC31E726CE800C6713A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FE2CC21E726CE800C6713A /* App.swift */; };
 		E3FE2CC51E726CE800C6713A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3FE2CC41E726CE800C6713A /* Assets.xcassets */; };
+		F8A9C4DE2B5C3EF400123456 /* MacSpecifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A9C4DD2B5C3EF400123456 /* MacSpecifications.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -59,6 +60,7 @@
 		E3FE2CC41E726CE800C6713A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E3FE2CC91E726CE800C6713A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E3FE2CD21E726EA100C6713A /* Touch Bar Simulator-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "Touch Bar Simulator-Bridging-Header.h"; sourceTree = "<group>"; usesTabs = 1; };
+		F8A9C4DD2B5C3EF400123456 /* MacSpecifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MacSpecifications.swift; sourceTree = "<group>"; usesTabs = 1; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				E3930B0F216625BE00F66410 /* Constants.swift */,
+				F8A9C4DD2B5C3EF400123456 /* MacSpecifications.swift */,
 				E3FE2CC21E726CE800C6713A /* App.swift */,
 				E35579EA21595EDC001CB642 /* TouchBarWindow.swift */,
 				E39A158D214D0C4F00F86D5D /* TouchBarView.swift */,
@@ -265,6 +268,7 @@
 				E356A16321028D81000148AD /* main.swift in Sources */,
 				E35579EB21595EDC001CB642 /* TouchBarWindow.swift in Sources */,
 				E3930B10216625BE00F66410 /* Constants.swift in Sources */,
+				F8A9C4DE2B5C3EF400123456 /* MacSpecifications.swift in Sources */,
 				E3FE2CC31E726CE800C6713A /* App.swift in Sources */,
 				E39A158E214D0C4F00F86D5D /* TouchBarView.swift in Sources */,
 			);
