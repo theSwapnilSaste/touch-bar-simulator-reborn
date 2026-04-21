@@ -86,21 +86,10 @@ final class TouchBarView: NSView {
 		updateLayout()
 		
 		// Observe changes to physical dimensions
-		Defaults.observe(.touchBarInset) { [weak self] _ in
-			self?.updateLayout()
-		}.tieToLifetime(of: self)
-		
-		Defaults.observe(.touchIdDiameter) { [weak self] _ in
-			self?.updateLayout()
-		}.tieToLifetime(of: self)
-		
-		Defaults.observe(.touchIdMargin) { [weak self] _ in
-			self?.updateLayout()
-		}.tieToLifetime(of: self)
-		
-		Defaults.observe(.cornerRadius) { [weak self] _ in
-			self?.updateLayout()
-		}.tieToLifetime(of: self)
+		Defaults.observe(.touchBarInset) { [weak self] _ in self?.updateLayout() }.tieToLifetime(of: self)
+		Defaults.observe(.touchIdDiameter) { [weak self] _ in self?.updateLayout() }.tieToLifetime(of: self)
+		Defaults.observe(.touchIdMargin) { [weak self] _ in self?.updateLayout() }.tieToLifetime(of: self)
+		Defaults.observe(.cornerRadius) { [weak self] _ in self?.updateLayout() }.tieToLifetime(of: self)
 	}
 
 	@available(*, unavailable)
@@ -183,7 +172,7 @@ final class TouchBarView: NSView {
 	private func getActualTouchBarSize() -> CGSize {
 		// DFRGetScreenSize() returns the Touch Bar's native pixel dimensions
 		// This is what the system expects for coordinate input
-		return DFRGetScreenSize()
+		DFRGetScreenSize()
 	}
 
 	override func mouseDown(with event: NSEvent) {
@@ -239,8 +228,8 @@ final class TouchBarView: NSView {
 		
 		// Touch ID button on the right (if it exists on this Mac model)
 		if hasButton {
-			let buttonSize = NSSize(width: scaledTouchIdDiameter, height: scaledTouchIdDiameter)
-			let buttonOrigin = NSPoint(x: bounds.width - inset - scaledTouchIdDiameter, y: (bounds.height - scaledTouchIdDiameter) / 2)
+			let buttonSize = CGSize(width: scaledTouchIdDiameter, height: scaledTouchIdDiameter)
+			let buttonOrigin = CGPoint(x: bounds.width - inset - scaledTouchIdDiameter, y: (bounds.height - scaledTouchIdDiameter) / 2)
 			touchIdButton.frame = NSRect(origin: buttonOrigin, size: buttonSize)
 		}
 	}

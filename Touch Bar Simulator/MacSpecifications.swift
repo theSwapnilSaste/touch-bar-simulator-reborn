@@ -14,6 +14,9 @@ struct MacSpecifications {
 	let speakerRightMarginMM: Double // from right edge
 	let notchWidthMM: Double // width of notch/camera housing if present
 	let notchLeftOffsetMM: Double // distance from left edge
+	let touchIdDiameter: Double // in mm
+	let touchIdMargin: Double // in mm
+	let cornerRadius: Double // in mm
 
 	// All dimensions in millimeters
 	static let all: [MacSpecifications] = [
@@ -30,7 +33,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 20,
 			speakerRightMarginMM: 20,
 			notchWidthMM: 32,
-			notchLeftOffsetMM: 136
+			notchLeftOffsetMM: 136,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		),
 		MacSpecifications(
 			modelIdentifier: "MacBookPro19,1", // 14" M2 Pro/Max
@@ -44,7 +50,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 20,
 			speakerRightMarginMM: 20,
 			notchWidthMM: 32,
-			notchLeftOffsetMM: 136
+			notchLeftOffsetMM: 136,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		),
 		MacSpecifications(
 			modelIdentifier: "MacBookPro20,1", // 14" M3 Pro/Max
@@ -58,7 +67,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 20,
 			speakerRightMarginMM: 20,
 			notchWidthMM: 32,
-			notchLeftOffsetMM: 136
+			notchLeftOffsetMM: 136,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		),
 
 		// M3/M4 MacBook Pro 16" - Physical Escape, Touch ID
@@ -74,7 +86,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 28,
 			speakerRightMarginMM: 28,
 			notchWidthMM: 32,
-			notchLeftOffsetMM: 158
+			notchLeftOffsetMM: 158,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		),
 		MacSpecifications(
 			modelIdentifier: "MacBookPro19,2", // 16" M2 Pro/Max
@@ -88,7 +103,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 28,
 			speakerRightMarginMM: 28,
 			notchWidthMM: 32,
-			notchLeftOffsetMM: 158
+			notchLeftOffsetMM: 158,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		),
 		MacSpecifications(
 			modelIdentifier: "MacBookPro20,2", // 16" M3 Pro/Max
@@ -102,7 +120,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 28,
 			speakerRightMarginMM: 28,
 			notchWidthMM: 32,
-			notchLeftOffsetMM: 158
+			notchLeftOffsetMM: 158,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		),
 		MacSpecifications(
 			modelIdentifier: "MacBookPro21,1", // 14" M4 Pro/Max
@@ -116,7 +137,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 20,
 			speakerRightMarginMM: 20,
 			notchWidthMM: 32,
-			notchLeftOffsetMM: 136
+			notchLeftOffsetMM: 136,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		),
 		MacSpecifications(
 			modelIdentifier: "MacBookPro21,2", // 16" M4 Pro/Max
@@ -130,7 +154,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 28,
 			speakerRightMarginMM: 28,
 			notchWidthMM: 32,
-			notchLeftOffsetMM: 158
+			notchLeftOffsetMM: 158,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		),
 
 		// MacBook Air 13" and 15" (M2/M3) - Physical Escape, Touch ID
@@ -146,7 +173,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 18,
 			speakerRightMarginMM: 18,
 			notchWidthMM: 32,
-			notchLeftOffsetMM: 126
+			notchLeftOffsetMM: 126,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		),
 		MacSpecifications(
 			modelIdentifier: "MacBookAir11,1", // 13" M3
@@ -160,7 +190,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 18,
 			speakerRightMarginMM: 18,
 			notchWidthMM: 32,
-			notchLeftOffsetMM: 126
+			notchLeftOffsetMM: 126,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		),
 		MacSpecifications(
 			modelIdentifier: "MacBookAir10,2", // 15" M2
@@ -174,7 +207,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 24,
 			speakerRightMarginMM: 24,
 			notchWidthMM: 32,
-			notchLeftOffsetMM: 148
+			notchLeftOffsetMM: 148,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		),
 		MacSpecifications(
 			modelIdentifier: "MacBookAir11,2", // 15" M3
@@ -188,7 +224,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 24,
 			speakerRightMarginMM: 24,
 			notchWidthMM: 32,
-			notchLeftOffsetMM: 148
+			notchLeftOffsetMM: 148,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		),
 
 		// Intel MacBook Pro (old Touch Bar models)
@@ -204,7 +243,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 24,
 			speakerRightMarginMM: 24,
 			notchWidthMM: 0,
-			notchLeftOffsetMM: 0
+			notchLeftOffsetMM: 0,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		),
 		MacSpecifications(
 			modelIdentifier: "MacBookPro16,1", // 16" 2019 Intel
@@ -218,7 +260,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 28,
 			speakerRightMarginMM: 28,
 			notchWidthMM: 0,
-			notchLeftOffsetMM: 0
+			notchLeftOffsetMM: 0,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		),
 
 		// Default fallback
@@ -234,7 +279,10 @@ struct MacSpecifications {
 			speakerLeftMarginMM: 20,
 			speakerRightMarginMM: 20,
 			notchWidthMM: 32,
-			notchLeftOffsetMM: 136
+			notchLeftOffsetMM: 136,
+			touchIdDiameter: 10,
+			touchIdMargin: 5,
+			cornerRadius: 3
 		)
 	]
 

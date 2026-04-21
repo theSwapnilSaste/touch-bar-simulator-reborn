@@ -115,8 +115,8 @@ extension AppDelegate: NSMenuDelegate {
 		let macInfo = window.getCurrentMacInfo()
 		let modelInfoItem = NSMenuItem("Mac Model")
 		let modelLabel = NSTextField(labelWithString: "Detected: \(macInfo.model)")
-		modelLabel.font = .systemFont(ofSize: 11)
-		modelLabel.alignment = .left
+		modelLabel.font = NSFont.systemFont(ofSize: 11)
+		modelLabel.alignment = NSTextAlignment.left
 		modelInfoItem.view = modelLabel
 		menu.addItem(modelInfoItem)
 
@@ -226,7 +226,8 @@ private final class MenuSliderView: NSView {
 		slider.maxValue = max
 		slider.bindDoubleValue(to: key)
 		slider.addAction { [weak self] sender in
-			guard let self = self else { return }
+			guard let self = self
+				else { return }
 			self.valueField.stringValue = String(format: self.format, sender.doubleValue)
 		}
 
@@ -242,7 +243,8 @@ private final class MenuSliderView: NSView {
 		valueField.stringValue = String(format: format, Defaults[key])
 
 		Defaults.observe(key) { [weak self] change in
-			guard let self = self else { return }
+			guard let self = self
+				else { return }
 			self.slider.doubleValue = change.newValue
 			self.valueField.stringValue = String(format: self.format, change.newValue)
 		}
