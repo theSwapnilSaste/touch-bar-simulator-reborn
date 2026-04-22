@@ -449,7 +449,7 @@ final class TouchBarWindow: NSPanel {
 		if !Defaults[.usePhysicalModelMatching] {
 			// Use custom dimensions if physical matching is disabled
 			let width = millimetersToPoints(Constants.touchBarPhysicalWidth / 7.8) // ~278mm effective width
-			let height = millimetersToPoints(Defaults[.touchBarHeightMM] ?? Constants.touchBarPhysicalHeight)
+			let height = millimetersToPoints(Defaults[.touchBarHeightMM])
 			return CGSize(width: width, height: height)
 		}
 

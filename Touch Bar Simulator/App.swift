@@ -4,7 +4,7 @@ import Defaults
 import LaunchAtLogin
 import KeyboardShortcuts
 
-final class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 	private(set) lazy var window: TouchBarWindow = {
 		let window = TouchBarWindow()
 		window.alphaValue = Defaults[.windowTransparency]
@@ -124,7 +124,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 		// Reload the Touch Bar when user logs back in
 		window.touchBarViewInstance?.reloadDisplay()
 	}
-}
 
 	private func update(menu: NSMenu) {
 		menu.removeAllItems()
