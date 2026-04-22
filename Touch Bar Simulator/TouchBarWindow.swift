@@ -7,6 +7,11 @@ final class TouchBarWindow: NSPanel {
 	private var baseTouchBarSize = CGSize.zero
 	private var macSpecs = MacSpecifications.current()
 	
+	// Public accessor for TouchBarView
+	var touchBarViewInstance: TouchBarView? {
+		touchBarView
+	}
+	
 	// TODO: Migrate this to not use `Codable`.
 	enum Docking: String, Codable {
 		case floating

@@ -17,6 +17,7 @@ struct KeyboardShortcutsView: View {
 	var body: some View {
 		VStack {
 			ShortcutRecorder(title: "Toggle Touch Bar", shortcut: .toggleTouchBar)
+			ShortcutRecorder(title: "Relaunch App", shortcut: .relaunchApp)
 		}
 			.padding(20)
 			.fixedSize()

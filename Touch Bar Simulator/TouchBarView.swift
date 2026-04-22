@@ -133,6 +133,15 @@ final class TouchBarView: NSView {
 		DFRSetStatus(initialDFRStatus)
 	}
 
+	func reloadDisplay() {
+		// Stop the current stream
+		stop()
+		// Restart the stream after a brief delay to ensure proper cleanup
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+			self?.start()
+		}
+	}
+
 	private func mouseEvent(_ event: NSEvent) {
 		let locationInView = convert(event.locationInWindow, from: nil)
 		

@@ -40,6 +40,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 		KeyboardShortcuts.onKeyUp(for: .toggleTouchBar) { [self] in
 			toggleView()
 		}
+
+		KeyboardShortcuts.onKeyUp(for: .relaunchApp) { [self] in
+			SSApp.relaunch()
+		}
+
+		// Subscribe to sleep/wake and login notifications
+		listenForSleepWakeAndLoginEvents()
 	}
 
 	func checkAccessibilityPermission() {
@@ -74,9 +81,51 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 	func toggleView() {
 		window.setIsVisible(!window.isVisible)
 	}
+
+	private func listenForSleepWakeAndLoginEvents() {
+		// Listen for Mac sleep/wake events
+		NSWorkspace.shared.notificationCenter.addObserver(
+			self,
+			selector: #selector(systemWillSleep(_:)),
+			name: NSWorkspace.screensDidSleepNotification,
+			object: nil
+		)
+
+		NSWorkspace.shared.notificationCenter.addObserver(
+			self,
+			selector: #selector(systemDidWake(_:)),
+			name: NSWorkspace.screensDidWakeNotification,
+			object: nil
+		)
+
+		// Listen for user login/unlock events
+		NSWorkspace.shared.notificationCenter.addObserver(
+			self,
+			selector: #selector(sessionDidUnlock(_:)),
+			name: NSWorkspace.sessionDidBecomeActiveNotification,
+			object: nil
+		)
+	}
+
+	@objc
+	private func systemWillSleep(_ notification: Notification) {
+		// Optionally pause the display stream to save resources
+		window.touchBarViewInstance?.stop()
+	}
+
+	@objc
+	private func systemDidWake(_ notification: Notification) {
+		// Reload the Touch Bar view to restore proper display
+		window.touchBarViewInstance?.reloadDisplay()
+	}
+
+	@objc
+	private func sessionDidUnlock(_ notification: Notification) {
+		// Reload the Touch Bar when user logs back in
+		window.touchBarViewInstance?.reloadDisplay()
+	}
 }
 
-extension AppDelegate: NSMenuDelegate {
 	private func update(menu: NSMenu) {
 		menu.removeAllItems()
 

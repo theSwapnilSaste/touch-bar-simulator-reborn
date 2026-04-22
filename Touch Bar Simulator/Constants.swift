@@ -48,4 +48,5 @@ extension CGPoint: Defaults.Serializable {}
 
 extension KeyboardShortcuts.Name {
 	static let toggleTouchBar = Self("toggleTouchBar")
+	static let relaunchApp = Self("relaunchApp")
 }
